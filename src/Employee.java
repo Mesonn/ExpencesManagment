@@ -6,6 +6,37 @@ public class Employee {
     private String jobTitle;
     private String department;
 
+    public Employee(int id, String title, String firstName, String surName, String jobTitle, String department) {
+        this.id = id;
+        this.title = title;
+        this.firstName = firstName;
+        this.surName = surName;
+        this.jobTitle = jobTitle;
+        this.department = department;
+    }
+
+    public Employee(){
+
+    }
+    public Employee (int id ,String jobTitle){
+        this.id = id;
+        this.jobTitle = jobTitle;
+    }
+
+
+    public String getMailingName(){
+        return  title + " " + firstName + " " + surName;
+    }
+
+    public String getMailingName(boolean firstInitialOnly){
+        if (firstInitialOnly){
+            return title + " " + firstName.substring(0,1) + " " + surName;
+        }
+        else {
+            return title + " "+ surName;
+        }
+    }
+
     public int getId() {
         return id;
     }
