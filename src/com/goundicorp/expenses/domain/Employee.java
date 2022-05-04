@@ -1,3 +1,5 @@
+package com.goundicorp.expenses.domain;
+
 public class Employee {
     private int id;
     private String title ;
@@ -5,6 +7,8 @@ public class Employee {
     private String surName;
     private String jobTitle;
     private String department;
+
+    private ExpenseClaim[] claims;
 
     public Employee(int id, String title, String firstName, String surName, String jobTitle, String department) {
         this.id = id;

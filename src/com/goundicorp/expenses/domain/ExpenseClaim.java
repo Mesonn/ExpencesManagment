@@ -1,3 +1,5 @@
+package com.goundicorp.expenses.domain;
+
 public class ExpenseClaim {
     private Integer id;
     private  Integer employeeId;

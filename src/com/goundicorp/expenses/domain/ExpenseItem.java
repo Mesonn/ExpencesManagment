@@ -1,3 +1,5 @@
+package com.goundicorp.expenses.domain;
+
 public class ExpenseItem {
     private Integer id, claimId;
     private  String expenseType, description;
