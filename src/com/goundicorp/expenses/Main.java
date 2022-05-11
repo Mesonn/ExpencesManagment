@@ -1,9 +1,8 @@
 package com.goundicorp.expenses;
 
-import com.goundicorp.expenses.domain.Employee;
-import com.goundicorp.expenses.domain.Employees;
-import com.goundicorp.expenses.domain.ExpenseClaim;
-import com.goundicorp.expenses.domain.ExpenseItem;
+import com.goundicorp.expenses.domain.*;
+
+import java.time.LocalDate;
 
 public class Main {
     public static void main(String[] args) {
@@ -26,9 +25,9 @@ public class Main {
 
         employees.addEmployee(employee1);
         employees.addEmployee(employee2);
-        employees.addEmployee(new Employee(3, "Mrs", "Susan", "Brown","Director","Finance"));
+        employees.addEmployee(new Employee(3, "Mrs", "Susan", "Brown","Director", Department.MARKETING));
 
-        ExpenseClaim expenseClaim = new ExpenseClaim(24,444,"20-04-1980",300.0);
+        ExpenseClaim expenseClaim = new ExpenseClaim(24,444, LocalDate.now(),300.0);
         System.out.println(expenseClaim.getEmployeeId());
         expenseClaim.setPaid(true);
         System.out.println(expenseClaim.isPaid());
@@ -36,6 +35,8 @@ public class Main {
         expenseClaim.setPaid(true);
         System.out.println(expenseClaim.isPaid());
         employees.printEmployees();
-        ExpenseItem expenseItem = new ExpenseItem(24,588, "Hotel","Hotel Duisburg", 500.0);
+        ExpenseItem expenseItem = new ExpenseItem(24,588, ExpenseType.ACCOMODATION,"Hotel Duisburg", 500.0);
+
+        System.out.println(employee1.toString());
     }
 }
