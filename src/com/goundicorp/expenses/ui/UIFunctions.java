@@ -1,8 +1,6 @@
 package com.goundicorp.expenses.ui;
 
-import com.goundicorp.expenses.domain.Department;
-import com.goundicorp.expenses.domain.Employee;
-import com.goundicorp.expenses.domain.ExpenseClaim;
+import com.goundicorp.expenses.domain.*;
 import com.goundicorp.expenses.exceptions.InvalidEmployeeIdException;
 import com.goundicorp.expenses.exceptions.NameTooShortException;
 import com.goundicorp.expenses.utilities.EmployeeUtilities;
@@ -69,8 +67,27 @@ public class UIFunctions {
                 System.out.println("Department you entred was not valid");
             }
         }
+        System.out.println("Is this a member of staff? Y/N");
+        String isAStaffMember = scanner.nextLine();
+        if(isAStaffMember.toUpperCase().equals("Y")){
+            StaffEmployee staffEmployee = new StaffEmployee(employee);
+            System.out.println("Enter Username");
+            String username = scanner.nextLine();
+            staffEmployee.setUsername(username);
 
-        return (employee);
+            System.out.println("Enter password");
+            String password = scanner.nextLine();
+            staffEmployee.setUsername(password);
+
+            return  staffEmployee;
+
+        }
+        else {
+
+
+            return (employee);
+
+        }
     }
     public ExpenseClaim registerNewExpenseClaim(){
         Scanner scanner = new Scanner(System.in);
@@ -86,11 +103,59 @@ public class UIFunctions {
 
         LocalDate dateOfClaim = LocalDate.now();
 
-        System.out.println("Enter the amount");
-        double totalAmount = scanner.nextDouble();
-        scanner.nextLine();
 
-        ExpenseClaim claim  = new ExpenseClaim(claimId,employeeId,dateOfClaim,totalAmount);
+
+        ExpenseClaim claim  = new ExpenseClaim(claimId,employeeId,dateOfClaim);
+
+        boolean finished = false;
+
+        while (!finished){
+            System.out.println("Enter the expense item Id");
+            int eiId = scanner.nextInt();
+            scanner.nextLine();
+
+            boolean expenseTypeIsValid = false;
+            ExpenseType eiType = null;
+            while (!expenseTypeIsValid) {
+                System.out.println("Enter the ExpenseType");
+                String expenseType = scanner.nextLine();
+
+                try {
+                    eiType = ExpenseType.valueOf(expenseType.toUpperCase());
+                    expenseTypeIsValid = true;
+                }catch (IllegalArgumentException e){
+                    System.out.println("ExpenseType you entred was not valid");
+                }
+            }
+
+            System.out.println("Enter the Description");
+            String description = scanner.nextLine();
+            scanner.nextLine();
+
+
+            System.out.println("Enter the amount");
+            double amount = scanner.nextDouble();
+            scanner.nextLine();
+
+
+            ExpenseItem ei = new ExpenseItem(eiId, claimId, eiType,  description,amount  );
+            claim.addExpenseItem(ei);
+
+            System.out.println("Enter another expense item? Y/N");
+            String anyMore = scanner.nextLine();
+
+            if (! anyMore.toUpperCase().equals("Y")){
+                finished = true;
+            }
+
+
+
+
+
+
+        }
+
+
 
         return claim;
 

@@ -3,67 +3,61 @@ package com.goundicorp.expenses.domain;
 import com.goundicorp.expenses.domain.Employee;
 import com.goundicorp.expenses.exceptions.EmployeeNotFoundException;
 
+import java.util.*;
+
 public class Employees {
-    private Employee[] employees;
+    private Map<Integer, Employee> employees = new HashMap<>();
 
-    public Employees(int numberOfEmployees){
-        employees = new Employee[numberOfEmployees];
 
-    }
     public void addEmployee(Employee employee){
-        int firstEmptyPosition = -1 ;
-        for (int i = 0; i < employees.length; i++){
-            if(firstEmptyPosition == -1 && employees[i] == null){
-                firstEmptyPosition = i;
-            }
-        }
-        if(firstEmptyPosition == -1){
-            System.out.println("Array is full");
-        }
-        else{
-            employees[firstEmptyPosition] = employee;
-        }
-
+      employees.put(employee.getId(), employee);
     }
     public void printEmployees(){
-        for(Employee e : employees){
-            if (e != null)
-                System.out.println(e);
+        List<Employee> employeeList = new ArrayList<>(employees.values());
+        Collections.sort(employeeList);
+        for(Employee e : employeeList) {
+            System.out.println(e);
+            for(ExpenseClaim claim : e.getClaims().values()){
+                System.out.println(claim);
+                claim.printExpenseItems();
+                System.out.println("Total value of claim" + claim.getTotalAmount());
+            }
         }
     }
+
     public Employee findBySurname(String surname){
-        for(Employee e : employees){
-            if ( e!= null && e.getSurName().equals(surname)){
+        for(Employee e : employees.values()){
+            if ( e.getSurName().equals(surname)){
                 return e;
             }
 
         }
         return null ;
     }
-    public boolean employeeExists(int id){
-        for(Employee e : employees) {
-            if (e != null && e.getId() == id) {
-                return true;
-            }
+
+
+    public Employee findByID(int id){
+        return employees.get(id);
+
         }
-        return false;
+
+
+    public boolean employeeExists(int id) {
+        return employees.containsKey(id);
+
     }
+
+
     public void addExpenseClaim(ExpenseClaim claim)throws EmployeeNotFoundException{
         int employeeId = claim.getEmployeeId();
         if(!employeeExists(employeeId)){
             throw new EmployeeNotFoundException();
         }
-        for (Employee e: employees) {
-            if(e != null && e.getId()==employeeId){
-                int firstEmptyPosition = -1;
-                for (int i= 0; i < e.getClaims().length; i++){
-                    if(firstEmptyPosition == -1 && e.getClaims()[i] == null){
-                        firstEmptyPosition = i;
-                    }
-                }
-                e.getClaims()[firstEmptyPosition] = claim;
-            }
+        for (Employee e: employees.values()) {
+            if(e.getId()==employeeId) {
+                e.getClaims().put(claim.getId(), claim);
 
+            }
         }
     }
 

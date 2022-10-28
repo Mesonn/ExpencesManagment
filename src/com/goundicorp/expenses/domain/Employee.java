@@ -1,9 +1,9 @@
 package com.goundicorp.expenses.domain;
 
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.*;
 
-public class Employee {
+public class Employee implements Comparable<Employee>  {
+
     private int id;
     private String title ;
     private String firstName;
@@ -11,7 +11,7 @@ public class Employee {
     private String jobTitle;
     private Department department;
 
-    private ExpenseClaim[] claims;
+    private Map<Integer ,ExpenseClaim> claims = new HashMap<>();
 
     public Employee(int id, String title, String firstName, String surName, String jobTitle, Department department) {
         this.id = id;
@@ -23,13 +23,10 @@ public class Employee {
     }
 
     public Employee(){
-        claims = new ExpenseClaim[10];
-
     }
     public Employee (int id ,String jobTitle){
         this.id = id;
         this.jobTitle = jobTitle;
-        claims = new ExpenseClaim[10];
     }
 
 
@@ -78,8 +75,21 @@ public class Employee {
         this.title = title;
     }
 
-    public ExpenseClaim[] getClaims() {
+    public Map<Integer, ExpenseClaim> getClaims() {
         return claims;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Employee employee = (Employee) o;
+        return id == employee.id && Objects.equals(title, employee.title) && Objects.equals(firstName, employee.firstName) && Objects.equals(surName, employee.surName) && Objects.equals(jobTitle, employee.jobTitle) && department == employee.department && Objects.equals(claims, employee.claims);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, firstName, surName, jobTitle, department, claims);
     }
 
     public void setFirstName(String firstName) {
@@ -88,6 +98,19 @@ public class Employee {
         }else {
         this.firstName = firstName;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", surName='" + surName + '\'' +
+                ", jobTitle='" + jobTitle + '\'' +
+                ", department=" + department +
+
+                '}';
     }
 
     public void setSurName(String surName) {
@@ -102,31 +125,9 @@ public class Employee {
         this.department = department;
     }
 
-    @Override
-    public String toString() {
-        return "Employee{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", surName='" + surName + '\'' +
-                ", jobTitle='" + jobTitle + '\'' +
-                ", department='" + department + '\'' +
-                ", claims=" + Arrays.toString(claims) +
-                '}';
-    }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Employee employee = (Employee) o;
-        return id == employee.id && Objects.equals(title, employee.title) && Objects.equals(firstName, employee.firstName) && Objects.equals(surName, employee.surName) && Objects.equals(jobTitle, employee.jobTitle) && Objects.equals(department, employee.department) && Arrays.equals(claims, employee.claims);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = Objects.hash(id, title, firstName, surName, jobTitle, department);
-        result = 31 * result + Arrays.hashCode(claims);
-        return result;
+    public int compareTo(Employee o) {
+        return this.surName.compareTo(o.getSurName());
     }
 }

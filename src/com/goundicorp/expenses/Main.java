@@ -11,7 +11,7 @@ public class Main {
         employee1.setTitle("Mr");
         employee1.setFirstName("Dali");
         employee1.setSurName("Goundi");
-        Employees employees = new Employees(15);
+        Employees employees = new Employees();
         Employee foundemployee = employees.findBySurname("Brown");
 
         System.out.println(employee1.getMailingName());
@@ -27,7 +27,7 @@ public class Main {
         employees.addEmployee(employee2);
         employees.addEmployee(new Employee(3, "Mrs", "Susan", "Brown","Director", Department.MARKETING));
 
-        ExpenseClaim expenseClaim = new ExpenseClaim(24,444, LocalDate.now(),300.0);
+        ExpenseClaim expenseClaim = new ExpenseClaim(24,444, LocalDate.now());
         System.out.println(expenseClaim.getEmployeeId());
         expenseClaim.setPaid(true);
         System.out.println(expenseClaim.isPaid());
