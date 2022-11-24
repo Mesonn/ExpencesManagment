@@ -79,6 +79,10 @@ public class Employee implements Comparable<Employee>  {
         return claims;
     }
 
+    public void addClaim(ExpenseClaim claim) {
+        claims.put(claim.getId(), claim);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

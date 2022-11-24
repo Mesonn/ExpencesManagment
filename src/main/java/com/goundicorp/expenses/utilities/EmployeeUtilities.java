@@ -1,12 +1,12 @@
 package com.goundicorp.expenses.utilities;
 
 import com.goundicorp.expenses.domain.Employee;
-import com.goundicorp.expenses.domain.Employees;
+import com.goundicorp.expenses.domain.EmployeesInMemoryImpl;
 import com.goundicorp.expenses.exceptions.InvalidEmployeeIdException;
 import com.goundicorp.expenses.exceptions.NameTooShortException;
 
 public class EmployeeUtilities {
-    public boolean employeeExists(Employees employees, Employee employee){
+    public boolean employeeExists(EmployeesInMemoryImpl employees, Employee employee){
         return employees.findBySurname(employee.getSurName()) != null ;
     }
     public Integer validateEmployeeId(String inputID) throws InvalidEmployeeIdException {

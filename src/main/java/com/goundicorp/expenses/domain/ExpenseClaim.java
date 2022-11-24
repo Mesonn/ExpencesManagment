@@ -14,6 +14,11 @@ public class ExpenseClaim {
 
     private List<ExpenseItem> expenseItems;
 
+
+    public List<ExpenseItem> getExpenseItems() {
+        return expenseItems;
+    }
+
     public ExpenseClaim(Integer id, Integer employeeId, LocalDate dateOfClaim) {
         this.id = id;
         this.employeeId = employeeId;

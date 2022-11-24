@@ -1,22 +1,30 @@
 package com.goundicorp.expenses;
 
-import com.goundicorp.expenses.domain.Employee;
-import com.goundicorp.expenses.domain.Employees;
-import com.goundicorp.expenses.domain.ExpenseClaim;
+import com.goundicorp.expenses.domain.*;
 import com.goundicorp.expenses.exceptions.EmployeeNotFoundException;
 import com.goundicorp.expenses.managment.ExpenseManagementProcess;
 import com.goundicorp.expenses.managment.ExpressExpenseManagementProcess;
 import com.goundicorp.expenses.managment.RegularExpenseManagementProcess;
 import com.goundicorp.expenses.ui.UIFunctions;
 import com.goundicorp.expenses.utilities.ExpenseAnalyses;
+import com.goundicorp.expenses.utilities.ExpenseAnalysisImpl;
 import com.goundicorp.expenses.utilities.ExpenseAnalysisTempImpl;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 
 public class ExpenseManagementSystem {
-    public static void main(String[] args) {
-        Employees employees = new Employees();
+    public static void main(String[] args) throws ClassNotFoundException, IOException {
+        Employees employees = new EmployeesDatabaseImp();
         Scanner scanner = new Scanner(System.in);
         UIFunctions uiFunctions = new UIFunctions();
 
@@ -32,6 +40,7 @@ public class ExpenseManagementSystem {
             System.out.println("e - register new employee");
             System.out.println("c - register new claim");
             System.out.println("p - print all employees");
+            System.out.println("f - make a file with employees claims");
             System.out.println("a - approve claim");
             System.out.println("r1 - outstanding expense Claim");
             System.out.println("r2 - paid expense claims");
@@ -39,7 +48,7 @@ public class ExpenseManagementSystem {
             System.out.println("x - exit");
 
             String option = scanner.nextLine();
-            ExpenseAnalyses expenseAnalyses = new ExpenseAnalysisTempImpl();
+            ExpenseAnalyses expenseAnalyses = new ExpenseAnalysisImpl(employees);
 
             switch (option) {
                 case "e":
@@ -61,6 +70,22 @@ public class ExpenseManagementSystem {
                 case "p":
                     employees.printEmployees();
                     break;
+                case "f":
+                    List<Employee> employeeList = employees.getEmployeeList();
+                    Path report = Paths.get(System.getProperty("user.home") + File.separator + "expenses_report.txt");
+                    String lineTerminator = System.getProperty("line.separator");
+                    Collections.sort(employeeList);
+                    for(Employee emp : employeeList) {
+                        Files.writeString(report, emp.toString() + lineTerminator, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+                        for (ExpenseClaim empClaim : emp.getClaims().values()) {
+                            Files.writeString(report,empClaim.toString() + lineTerminator,StandardOpenOption.APPEND);
+                            List<String> claimData = empClaim.getExpenseItems().stream().map(ei -> ei.toString()).toList();
+                            Files.write(report,claimData,StandardOpenOption.APPEND);
+                            Files.writeString(report, "Total value of claim " + empClaim.getTotalAmount() + lineTerminator, StandardOpenOption.APPEND);
+                        }
+                    }
+                    break;
+
                 case "x":
                     readyToExit = true;
                     break;

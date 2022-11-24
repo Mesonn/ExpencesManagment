@@ -1,6 +1,11 @@
 package com.goundicorp.expenses.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Objects;
+
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 
 public class StaffEmployee extends Employee implements Comparable<Employee>{
     private  String username;

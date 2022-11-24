@@ -1,17 +1,24 @@
 package com.goundicorp.expenses.domain;
 
-import com.goundicorp.expenses.domain.Employee;
 import com.goundicorp.expenses.exceptions.EmployeeNotFoundException;
 
 import java.util.*;
 
-public class Employees {
+public class EmployeesInMemoryImpl implements Employees {
+
     private Map<Integer, Employee> employees = new HashMap<>();
 
 
+    @Override
     public void addEmployee(Employee employee){
       employees.put(employee.getId(), employee);
     }
+
+    @Override
+    public  List<Employee> getEmployeeList() {
+        return new ArrayList<Employee>(employees.values());
+    }
+    @Override
     public void printEmployees(){
         List<Employee> employeeList = new ArrayList<>(employees.values());
         Collections.sort(employeeList);
@@ -25,6 +32,7 @@ public class Employees {
         }
     }
 
+    @Override
     public Employee findBySurname(String surname){
         for(Employee e : employees.values()){
             if ( e.getSurName().equals(surname)){
@@ -36,18 +44,21 @@ public class Employees {
     }
 
 
+    @Override
     public Employee findByID(int id){
         return employees.get(id);
 
         }
 
 
+    @Override
     public boolean employeeExists(int id) {
         return employees.containsKey(id);
 
     }
 
 
+    @Override
     public void addExpenseClaim(ExpenseClaim claim)throws EmployeeNotFoundException{
         int employeeId = claim.getEmployeeId();
         if(!employeeExists(employeeId)){

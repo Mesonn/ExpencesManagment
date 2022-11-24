@@ -1,17 +1,19 @@
 package com.goundicorp.expenses;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.goundicorp.expenses.domain.*;
 
 import java.time.LocalDate;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JsonProcessingException {
         Employee employee1 = new Employee();
         employee1.setId(1);
         employee1.setTitle("Mr");
         employee1.setFirstName("Dali");
         employee1.setSurName("Goundi");
-        Employees employees = new Employees();
+        EmployeesInMemoryImpl employees = new EmployeesInMemoryImpl();
         Employee foundemployee = employees.findBySurname("Brown");
 
         System.out.println(employee1.getMailingName());
@@ -37,6 +39,14 @@ public class Main {
         employees.printEmployees();
         ExpenseItem expenseItem = new ExpenseItem(24,588, ExpenseType.ACCOMODATION,"Hotel Duisburg", 500.0);
 
-        System.out.println(employee1.toString());
+        ObjectMapper objectMapper = new ObjectMapper();
+        String emplJS = objectMapper.writeValueAsString(employee1);
+
+        System.out.println(emplJS);
+
+
+        StaffEmployee emplfromJS = objectMapper.readValue(emplJS,StaffEmployee.class);
+        System.out.println(emplfromJS);
+        //System.out.println(employee1.toString());
     }
 }
